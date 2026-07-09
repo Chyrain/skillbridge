@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SkillBridge — 让AI技能买家成为创造者</title>
+<style>
+  :root {
+    --bg: #09090b;
+    --surface: #18181b;
+    --border: #27272a;
+    --text: #fafafa;
+    --muted: #a1a1aa;
+    --accent: #a78bfa;
+    --accent2: #34d399;
+    --accent3: #fb923c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Mobile-first layout */
+  .container { padding: 0 20px; }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 0 40px;
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(167,139,250,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 24px;
+    width: fit-content;
+  }
+  .hero-label span { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+  .hero-cta { display: flex; flex-direction: column; gap: 12px; }
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+  }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover, .btn-primary:active { background: #c4b5fd; transform: scale(0.98); }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-outline:hover, .btn-outline:active { border-color: var(--accent); color: var(--accent); }
+
+  /* Stats - horizontal scroll on mobile */
+  .stats { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 36px 0; margin: 48px 0; }
+  .stats-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding: 0 20px;
+  }
+  .stats-grid::-webkit-scrollbar { display: none; }
+  .stat-item {
+    flex: 0 0 140px;
+    scroll-snap-align: start;
+    text-align: center;
+    padding: 0 16px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  .stat-number.accent { color: var(--accent); }
+  .stat-number.green { color: var(--accent2); }
+  .stat-number.orange { color: var(--accent3); }
+  .stat-label { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+  /* Sections */
+  .section { padding: 48px 0; }
+  .section-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  .section h2 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1.2; }
+  .section > p { color: var(--muted); font-size: 14px; margin-bottom: 28px; line-height: 1.7; }
+
+  /* Problem cards - vertical stack */
+  .problem-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+  .problem-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .problem-card .icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 12px; }
+  .problem-card h3 { font-size: 15px; margin-bottom: 6px; }
+  .problem-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* Journey - vertical timeline */
+  .journey-grid { display: flex; flex-direction: column; gap: 2px; background: var(--border); border-radius: 16px; overflow: hidden; }
+  .journey-step {
+    background: var(--surface);
+    padding: 24px 20px;
+    position: relative;
+  }
+  .journey-step .step-num { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .journey-step h3 { font-size: 17px; margin-bottom: 6px; }
+  .journey-step p { font-size: 13px; color: var(--muted); }
+  .journey-step .arrow { display: none; }
+
+  /* Feature cards - vertical stack */
+  .features-grid { display: flex; flex-direction: column; gap: 12px; }
+  .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .feature-card:hover { border-color: var(--accent); }
+  .feature-card h3 { font-size: 15px; margin-bottom: 6px; }
+  .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* CTA */
+  .cta-section { text-align: center; padding: 64px 0; position: relative; }
+  .cta-section::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(52,211,153,0.12) 0%, transparent 70%); pointer-events: none; }
+  .cta-section h2 { font-size: 24px; font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+  .cta-section p { color: var(--muted); margin-bottom: 28px; font-size: 14px; }
+
+  footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-label"><span></span> AI 技能变现新范式</div>
+    <h1>你买了无数AI技能<br><span class="gradient">是时候让它们为你工作了</span></h1>
+    <p>SkillBridge 帮助技能买家从「消费者」进化为「创造者」——把学过的提示词、工作流、自动化方案，变成可持续盈利的数字产品与服务。</p>
+    <div class="hero-cta">
+      <a href="#" class="btn btn-primary">🚀 立即开始</a>
+      <a href="#journey" class="btn btn-outline">了解路径 →</a>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stats-grid">
+    <div class="stat-item"><div class="stat-number accent">73%</div><div class="stat-label">AI技能买家从未变现</div></div>
+    <div class="stat-item"><div class="stat-number green">$2.4B</div><div class="stat-label">AI技能市场年规模</div></div>
+    <div class="stat-item"><div class="stat-number orange">6步</div><div class="stat-label">从买家到创造者</div></div>
+    <div class="stat-item"><div class="stat-number accent">14天</div><div class="stat-label">可上线首款产品</div></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="section-tag">痛点</div>
+    <h2>买了≠会了，会了≠赚了</h2>
+    <p>AI技能市场繁荣的背后，是大量买家的沉默成本。</p>
+    <div class="problem-grid">
+      <div class="problem-card"><div class="icon" style="background:rgba(167,139,250,0.15);">🗃️</div><h3>技能仓库积灰</h3><p>买了几十个提示词模板和工作流，用过一两次就再也没打开过。</p></div>
+      <div class="problem-card"><div class="icon" style="background:rgba(52,211,153,0.15);">💸</div><h3>有技能无变现</h3><p>明明会用AI工具，却不知道如何把它变成可以收钱的产品或服务。</p></div>
+      <div class="problem-card"><div class="icon" style="background:rgba(251,146,60,0.15);">🧱</div><h3>重复造轮子</h3><p>每个人都在独立摸索，没有标准路径，踩坑效率极低。</p></div>
+      <div class="problem-card"><div class="icon" style="background:rgba(167,139,250,0.15);">🤝</div><h3>孤军奋战</h3><p>没有同行圈子、没有反馈机制、没有持续改进的路径。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="journey">
+  <div class="container">
+    <div class="section-tag">路径</div>
+    <h2>6步，从买家到创造者</h2>
+    <p>我们拆解出了一条经过验证的最小可行路径。</p>
+    <div class="journey-grid">
+      <div class="journey-step"><div class="step-num">Step 01</div><h3>技能盘点</h3><p>梳理你已有的技能资产，找到可以产品化的切入点。</p></div>
+      <div class="journey-step"><div class="step-num">Step 02</div><h3>垂直定位</h3><p>选择一个足够具体的细分场景，打造差异化优势。</p></div>
+      <div class="journey-step"><div class="step-num">Step 03</div><h3>最小产品</h3><p>用现有技能组合，14天内做出第一款可销售的产品。</p></div>
+      <div class="journey-step"><div class="step-num">Step 04</div><h3>冷启动验证</h3><p>在2-3个渠道测试定价和需求，收第一笔真实收入。</p></div>
+      <div class="journey-step"><div class="step-num">Step 05</div><h3>放大复制</h3><p>找到可复制的交付模板，从服务逐步转向产品。</p></div>
+      <div class="journey-step"><div class="step-num">Step 06</div><h3>持续迭代</h3><p>建立反馈闭环，不断优化产品矩阵和变现路径。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-tag">为什么是SkillBridge</div>
+    <h2>专为技能买家设计</h2>
+    <p>不是另一个AI工具集合，是一套变现操作系统。</p>
+    <div class="features-grid">
+      <div class="feature-card"><h3>🎯 技能产品化引擎</h3><p>把散落的提示词和工作流，系统化地打包成可销售的产品形态。</p></div>
+      <div class="feature-card"><h3>📊 竞品情报分析</h3><p>实时追踪同赛道玩家的产品、定价和用户反馈，找到你的差异化空间。</p></div>
+      <div class="feature-card"><h3>🤝 买家社群网络</h3><p>接入同赛道技能买家社群，协作分工、互为渠道、降低获客成本。</p></div>
+      <div class="feature-card"><h3>⚡ 快速交付模板</h3><p>经过验证的交付SOP，让你从"自己干活"进化到"系统运转"。</p></div>
+      <div class="feature-card"><h3>📈 增长黑客实验室</h3><p>低预算冷启动策略，用数据驱动代替直觉试错。</p></div>
+      <div class="feature-card"><h3>💎 案例库与路径图</h3><p>收录真实变现案例，还原从0到1的完整决策链条。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2>你的AI技能，不该只是「收藏」</h2>
+    <p>加入 SkillBridge，让每一份投入都有回报</p>
+    <a href="#" class="btn btn-primary">🚀 免费加入 →</a>
+  </div>
+</section>
+
+<footer><div class="container"><p>© 2026 SkillBridge · AI技能变现新范式</p></div></footer>
+</body>
+</html>
